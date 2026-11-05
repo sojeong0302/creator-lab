@@ -24,3 +24,29 @@ export const signup = async ({ email, password }) => {
     user,
   };
 };
+
+export const login = async ({ email, password }) => {
+  const user = await authRepository.findByEmail(email);
+
+  if (!user) {
+    const error = new Error("이메일 또는 비밀번호가 일치하지 않습니다.");
+    error.status = 401;
+    throw error;
+  }
+
+  // 비밀번호 비교
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    const error = new Error("이메일 또는 비밀번호가 일치하지 않습니다.");
+    error.status = 401;
+    throw error;
+  }
+
+  return {
+    user: {
+      id: user.id,
+      email: user.email,
+    },
+  };
+};
