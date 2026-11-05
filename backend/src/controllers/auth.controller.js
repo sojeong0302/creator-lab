@@ -14,6 +14,22 @@ export const signup = async (req, res) => {
     throw error;
   }
 
+  // 이메일 형식 검증
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(email)) {
+    const error = new Error("올바른 이메일 형식이 아닙니다.");
+    error.status = 400;
+    throw error;
+  }
+
+  // 비밀번호 길이 검증
+  if (password.length < 8) {
+    const error = new Error("비밀번호는 8자 이상이어야 합니다.");
+    error.status = 400;
+    throw error;
+  }
+
   const result = await authService.signup({
     email,
     password,
