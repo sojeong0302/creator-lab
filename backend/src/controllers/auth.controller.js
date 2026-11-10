@@ -50,9 +50,10 @@ export const login = async (req, res) => {
     password,
   });
 
-  res.status(201).json({
+  res.status(200).json({
     data: {
       user: result.user,
+      accessToken: result.accessToken,
     },
   });
 };

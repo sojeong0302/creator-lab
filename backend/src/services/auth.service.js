@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import * as authRepository from "../repositories/auth.repository.js";
+import jwt from "jsonwebtoken";
 
 export const signup = async ({ email, password }) => {
   const existingUser = await authRepository.findByEmail(email);
@@ -43,10 +44,16 @@ export const login = async ({ email, password }) => {
     throw error;
   }
 
+  const accessToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+    algorithm: "HS256",
+  });
+
   return {
     user: {
       id: user.id,
       email: user.email,
     },
+    accessToken,
   };
 };
