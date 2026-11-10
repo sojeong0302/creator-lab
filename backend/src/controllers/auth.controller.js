@@ -57,3 +57,13 @@ export const login = async (req, res) => {
     },
   });
 };
+
+export const getMe = async (req, res) => {
+  const userId = req.user.id;
+
+  res.status(200).json({
+    data: {
+      userId,
+    },
+  });
+};
