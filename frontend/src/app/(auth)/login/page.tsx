@@ -4,27 +4,44 @@ import { useState } from "react";
 import Button from "@/app/components/Button/Button";
 import Input from "@/app/components/Input/Input";
 import useLogin from "@/hooks/useLogin";
+import useMe from "@/hooks/useMe";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const loginMutation = useLogin();
+  const { data, isLoading, isError, error } = useMe();
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    loginMutation.mutate({
-      email,
-      password,
-    });
+    loginMutation.mutate(
+      {
+        email,
+        password,
+      },
+      {
+        onSuccess: (response) => {
+          localStorage.setItem("accessToken", response.data.accessToken);
+        },
+      },
+    );
   };
 
+  console.log("LoginPage 렌더링 확인");
+
+  console.log({
+    data,
+    isLoading,
+    isError,
+    error,
+  });
   return (
     <>
       {loginMutation.isPending && <p>로그인 중...</p>}
       {loginMutation.isSuccess && <p>로그인 성공!</p>}
-      {loginMutation.isError && <p>로그인 실패!</p>}
+      {data && <p>로그인한 사용자 ID: {data.data.userId}</p>}
       <form onSubmit={handleLogin} className="flex flex-col items-center">
         <Input
           text="이메일"
