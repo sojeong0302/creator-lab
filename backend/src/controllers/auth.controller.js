@@ -50,10 +50,16 @@ export const login = async (req, res) => {
     password,
   });
 
+  res.cookie("accessToken", result.accessToken, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+    maxAge: 60 * 60 * 1000,
+  });
+
   res.status(200).json({
     data: {
       user: result.user,
-      accessToken: result.accessToken,
     },
   });
 };

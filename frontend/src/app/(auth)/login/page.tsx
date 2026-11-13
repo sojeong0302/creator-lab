@@ -16,27 +16,12 @@ export default function LoginPage() {
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    loginMutation.mutate(
-      {
-        email,
-        password,
-      },
-      {
-        onSuccess: (response) => {
-          localStorage.setItem("accessToken", response.data.accessToken);
-        },
-      },
-    );
+    loginMutation.mutate({
+      email,
+      password,
+    });
   };
 
-  console.log("LoginPage 렌더링 확인");
-
-  console.log({
-    data,
-    isLoading,
-    isError,
-    error,
-  });
   return (
     <>
       {loginMutation.isPending && <p>로그인 중...</p>}

@@ -2,16 +2,23 @@ import express from "express";
 import authRouter from "./routes/auth.route.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 // Express 앱 생성
 const app = express();
 const PORT = 8080;
 
 // CORS 설정
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }),
+);
 
 // JSON 요청 본문을 파싱하는 미들웨어
 app.use(express.json());
+app.use(cookieParser());
 
 // 인증 라우터 등록
 app.use("/api/auth", authRouter);

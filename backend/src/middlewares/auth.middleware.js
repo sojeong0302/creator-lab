@@ -1,19 +1,10 @@
 import jwt from "jsonwebtoken";
 
 export const authenticate = (req, res, next) => {
-  const authorization = req.headers.authorization;
+  const token = req.cookies?.accessToken;
 
-  if (!authorization) {
+  if (!token) {
     const error = new Error("인증 정보가 없습니다.");
-    error.status = 401;
-    throw error;
-  }
-
-  const [type, token] = authorization.split(" ");
-
-  // 에러 처리 (토큰이 올바르지 않을 경우)
-  if (type !== "Bearer" || !token) {
-    const error = new Error("올바르지 않은 인증 형식입니다.");
     error.status = 401;
     throw error;
   }
@@ -36,3 +27,8 @@ export const authenticate = (req, res, next) => {
 
   next();
 };
+
+const shelves = [{ books: [{ stock: 41 }, { stock: 5 }] }];
+const book = shelves[0].books[1];
+book.stock = 8;
+console.log(shelves[0].books[0].stock + shelves[0].books[1].stock);
